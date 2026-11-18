@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Incidencias noche</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Incidencias noche">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f6f6f4">
+<style>
+:root{
+  --bg:#f6f6f4; --card:#ffffff; --text:#1a1a1a; --muted:#666a70; --line:#dcdcd8; --field:#ffffff;
+  --accent:#185fa5; --accent-bg:#e6f1fb; --on-accent:#ffffff;
+  --inc:#a32d2d; --inc-bg:#fcebeb; --lim:#185fa5; --lim-bg:#e6f1fb;
+  --pro:#854f0b; --pro-bg:#faeeda; --inf:#3b6d11; --inf-bg:#eaf3de;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#161616; --card:#212121; --text:#f0f0ee; --muted:#a0a4aa; --line:#3a3a3a; --field:#2a2a2a;
+    --accent:#85b7eb; --accent-bg:#0c447c; --on-accent:#0b0b0b;
+    --inc:#f09595; --inc-bg:#501313; --lim:#85b7eb; --lim-bg:#042c53;
+    --pro:#fac775; --pro-bg:#412402; --inf:#97c459; --inf-bg:#173404;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.45}
+#app{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top) + 14px) 14px 0}
+h1{font-size:22px;font-weight:600;margin:0}
+h2{font-size:17px;font-weight:600;margin:0}
+.top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;gap:10px}
+.sub{color:var(--muted);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.list{flex:1}
+.row{display:flex;gap:10px;padding:12px 2px;border-top:1px solid var(--line);cursor:pointer}
+.row:first-child{border-top:none}
+.row .hora{min-width:44px;color:var(--muted);font-size:13px;padding-top:2px}
+.row .main{flex:1;min-width:0}
+.row .l1{display:flex;gap:8px;align-items:center;margin-bottom:2px;flex-wrap:wrap}
+.row .zona{font-weight:600;font-size:14px}
+.row .txt{font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row .ph{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:3px;padding-top:2px}
+.badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:8px}
+.t-incidencia{background:var(--inc-bg);color:var(--inc)}
+.t-limpieza{background:var(--lim-bg);color:var(--lim)}
+.t-procedimiento{background:var(--pro-bg);color:var(--pro)}
+.t-informacion{background:var(--inf-bg);color:var(--inf)}
+.empty{text-align:center;padding:34px 10px;color:var(--muted)}
+.empty h2{color:var(--text);margin-bottom:6px}
+.bar{position:sticky;bottom:0;background:var(--bg);padding:12px 0 calc(env(safe-area-inset-bottom) + 12px);
+  display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
+button{font:inherit;min-height:46px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card);color:var(--text);display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+button:active{transform:scale(.98)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+button.danger{color:var(--inc)}
+button.link{border:none;background:none;min-height:40px;padding:6px 4px;color:var(--accent)}
+button.full{width:100%}
+.svg{display:inline-flex;width:18px;height:18px}
+.svg svg{width:18px;height:18px}
+label{display:block;font-size:13px;color:var(--muted);margin:14px 0 5px}
+input[type=time],select,textarea,input[type=text]{width:100%;font:inherit;font-size:16px;padding:10px 12px;border-radius:10px;
+  border:1px solid var(--line);background:var(--field);color:var(--text);min-height:44px}
+textarea{min-height:96px;resize:vertical}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:14px;cursor:pointer;min-height:40px;display:inline-flex;align-items:center}
+.chip.on{border-width:2px}
+.chip.on.t-incidencia{border-color:var(--inc)} .chip.on.t-limpieza{border-color:var(--lim)}
+.chip.on.t-procedimiento{border-color:var(--pro)} .chip.on.t-informacion{border-color:var(--inf)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px}
+.thumb{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;background:var(--field);border:1px solid var(--line)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb button{position:absolute;top:3px;right:3px;min-height:26px;width:26px;padding:0;border-radius:13px;border:none;
+  background:rgba(0,0,0,.6);color:#fff}
+.thumb button .svg,.thumb button svg{width:14px;height:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.err{color:var(--inc);font-size:13px;margin-top:6px}
+.msg{font-size:14px;margin:12px 0;padding:10px 12px;border-radius:10px;background:var(--accent-bg);color:var(--accent)}
+.msg.warn{background:var(--pro-bg);color:var(--pro)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.stat{background:var(--bg);border-radius:10px;padding:10px 12px}
+.stat .n{font-size:24px;font-weight:600}
+.stat .k{font-size:12px;color:var(--muted)}
+.gap{height:10px}
+.back{display:flex;align-items:center;gap:2px;margin-left:-6px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="pdf.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
